@@ -49,8 +49,8 @@ class ULANZIDeck {
                 // 运行插件
                 this.emit(`${uuid}.${Events.run}`, jsonObj)
             } else if (event === "add") {
-                // 插件被添加时
-                
+                // 初始化加载
+                this.willAppear(uuid, jsonObj);
             } else if (event === "paramfromapp") {
                 // 插件功能被加载的时候(设置插件功能参数)
                 if (!this.actionChilds.has(remoteKey)) {
