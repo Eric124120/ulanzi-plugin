@@ -20,8 +20,6 @@ action.onWillAppear((evnt) => {
    
     //any prep for this action should go here...
     Voicemod.onToggleMuteMic((payload) => {
-        if(BUTTON_PRESSED) return
-        console.log("getting status of the mute mic flag: ", payload)
         updateButtonBitmap(evnt.uuid, evnt.key, payload.actionObject.value)
     })
 
