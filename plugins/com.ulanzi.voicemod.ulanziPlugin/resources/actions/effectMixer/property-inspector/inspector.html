@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta
+          name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>com.elgato.template Property Inspector</title>
+    <link rel="stylesheet" href="../../../libs/css/sdpi.css" />
+</head>
+
+<body>
+    <div class="sdpi-wrapper">
+        <hr class="tab-separator">
+        <form id="property-inspector">
+                <div class="sdpi-item">
+                    <div data-localize class="sdpi-item-label" title="Pick your voices list">Lists of Voices</div>
+
+                    <input data-localize class="sdpi-item-value" id="all-voices" name="voice-list-type" type="radio" value="all" /> 
+                        <label for="all-voices">
+                            <span class="icon-radio-button"></span>
+                            All
+                        </label>
+                    <input data-localize class="sdpi-item-value" id="fav-voices" name="voice-list-type" type="radio" value="favs"  />
+                        <label for="fav-voices"> 
+                            <span class="icon-radio-button"></span>
+                            Favorites
+                        </label>
+                    <input data-localize class="sdpi-item-value" id="custom-voices" name="voice-list-type" type="radio" value="custom"  /> 
+                        <label for="custom-voices">
+                            <span class="icon-radio-button"></span>
+                            Custom
+                        </label>
+                </div>
+                <div class="sdpi-item">
+                    <div data-localize class="sdpi-item-label" title="Voices">Voices</div>
+                    <select id="list-of-voices" name="selected-voice" class="sdpi-item-value select">
+
+                    </select>
+                </div>
+        </form>
+
+   </div>
+
+    <div class="sdpi-info-label hidden" style="top: -1000" value=""></div>
+
+    
+    <script src="../../../libs/js/constants.js"></script>
+    <script src="../../../libs/js/prototypes.js"></script>
+    <script src="../../../libs/js/timers.js"></script>
+    <script src="../../../libs/js/utils.js"></script>
+    <script src="../../../libs/js/events.js"></script>
+    <script src="../../../libs/js/api.js"></script>
+    <script src="../../../libs/js/property-inspector.js"></script>
+    <script src="../../../libs/js/dynamic-styles.js"></script>
+    <script src="../../../libs/js/voicemod.js"></script>
+
+    <!-- Property Inspector Source -->
+    <script src="inspector.js"></script>
+</body>
+
+</html>

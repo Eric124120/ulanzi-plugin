@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta
+          name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>net.voicemod+.windowsdesktop.sdPlugin Property Inspector</title>
+    <link rel="stylesheet" href="../../../libs/css/sdpi.css" />
+    <link rel="stylesheet" href="../../../libs/css/voicemod.css" />
+</head>
+
+<body>
+    <div class="sdpi-wrapper">
+        <hr class="tab-separator">
+        <!--<h1 id="context-label"></h1>-->
+        <div id="no-app-warning" class="hidden" data-localize>
+            <span class="not-running-msg">Voicemod is not running</span>
+            <div class="sdpi-item voicemod-not-installed" data-localize="">
+                <div class="sdpi-item-value">
+                    <div onclick="downloadVM()">
+                        <span
+                            id="download-vm-button"
+                            class="sdpi-item-child download-button label"
+                            data-localize
+                            title="Download Voicemod"
+                        >
+                        Download Voicemod
+                    </span>
+                    </div>
+                    <span
+                        class="sdpi-item-child label"
+                        id="bottom-msg"
+                        data-localize
+                        title="Install Voicemod"
+                    >Install Voicemod</span>
+                </div>
+            </div>        
+
+        </div>
+        <form id="property-inspector">
+                <div class="sdpi-item" id="lists-of-voices">
+                    <div data-localize class="sdpi-item-label" title="Lists of voices">Lists of Voices</div>
+
+                    <input data-localize class="sdpi-item-value" id="all-voices" name="voice-type-selected" type="radio" value="all" title="All"/> 
+                        <label for="all-voices" data-localize>
+                            <span class="icon-radio-button"></span>
+                            All
+                        </label>
+                    <input  class="sdpi-item-value" id="fav-voices" name="voice-type-selected" type="radio" value="favs"  title="Favorites" />
+                        <label for="fav-voices" data-localize> 
+                            <span class="icon-radio-button"></span>
+                            Favorites
+                        </label>
+                    <input data-localize class="sdpi-item-value" id="custom-voices" name="voice-type-selected" type="radio" value="custom"  title="Custom"/> 
+                        <label for="custom-voices" data-localize>
+                            <span class="icon-radio-button"></span>
+                            Custom
+                        </label>
+                </div>
+                <div class="sdpi-item">
+                    <div data-localize class="sdpi-item-label" title="Voices">Voices</div>
+                    <select id="list-of-voices" name="selected-voice" class="sdpi-item-value select">
+                        <option data-localize>Select a voice</option>
+                    </select>
+                </div>
+        </form>
+
+   </div>
+
+    <div class="sdpi-info-label hidden" style="top: -1000" value=""></div>
+
+    
+    <script src="../../../libs/js/constants.js"></script>
+    <script src="../../../libs/js/events.js"></script>
+    <script src="../../../libs/js/utils.js"></script>
+    <script src="../../../libs/js/storage.js"></script>
+    <script src="../../../libs/js/ulanzi-plugin.js"></script>
+    <script src="../../../libs/js/dynamic-styles.js"></script>
+    <script src="../../../libs/js/action.js"></script>
+    <script src="../../../libs/js/voicemod.js"></script>
+
+    
+
+    <!-- Property Inspector Source -->
+    <script src="inspector.js"></script>
+</body>
+
+</html>
