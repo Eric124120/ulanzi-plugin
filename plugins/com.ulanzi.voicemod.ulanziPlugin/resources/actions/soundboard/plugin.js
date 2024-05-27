@@ -100,7 +100,7 @@ const SoundboardAction = new SoundboardActionClass(ComUlanziUlanzideckVoicemodSo
 
 
 function loadMyBitMap(context, key, img) {
-    return $UD.setImage(context, key, 'data:image/png;base64,' + img, 1)
+    return $UD.setImage(context, key, 'data:image/png;base64,' + img)
 }
 
 SoundboardAction.onSendToPlugin((data) => {
@@ -121,13 +121,13 @@ SoundboardAction.onSendToPlugin((data) => {
     }
     if(payload.action == 'setImage') {
         console.log('setting action image')
-        return loadMyBitMap(context, key, payload.image)
+        return loadMyBitMap(context, key, payload.payload.image)
     }
 
     if(payload.action == 'retrieveSoundBitmap') {
         if(!payload.payload.currentSettings['button-images']) {
             Voicemod.onBitMapLoaded(context + "-tmp", ({ actionObject}) => {
-                loadMyBitMap(context, key, actionObject.result.default)
+                loadMyBitMap(context, key, actionObject.result?.default)
                 Voicemod.removeEventListeners(context + "-tmp")
                 Voicemod.__soundLists[payload.payload.currentSettings['selected-profile']].sounds.forEach ((s, idx) => {
                     if(s.id == payload.payload.currentSettings['selected-sound']) {
