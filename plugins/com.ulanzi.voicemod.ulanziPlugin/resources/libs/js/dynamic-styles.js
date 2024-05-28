@@ -68,6 +68,24 @@ $PI.onConnected(() => {
 	document.body.appendChild(node);
 });
 
+window.onload = function() {
+  setInterval(() => {
+    // 轮询检查测状态
+    try {
+      const globalSettings = window.getUlanziGlobalSettings();
+      // 状态显示设置
+      if(globalSettings?.status == VoicemodStatus.offline) {
+        blockUI()
+      } else if (globalSettings?.status == VoicemodStatus.connected) {
+        enableUI()
+      }
+    } catch(err) {
+      console.error(err);
+    }
+  }, 3000);
+}
+
+
 // added functions to block the UI if the applicaatino is not running
 function blockUI() {
     document.querySelector("#property-inspector").classList.add("hidden")
