@@ -82,7 +82,7 @@ window.onload = function() {
     } catch(err) {
       console.error(err);
     }
-  }, 3000);
+  }, 5000);
 }
 
 
