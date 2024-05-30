@@ -55,8 +55,8 @@ class ULANZIDeck {
                 // 插件功能被加载的时候(设置插件功能参数)
                 if (!this.actionChilds.has(remoteKey)) {
                     this.actionChilds.set(remoteKey, actionUUID)
+                    this.willAppear(uuid, jsonObj);
                 }
-                this.willAppear(uuid, jsonObj);
             } else if (event === "clear") {
                 // 插件卸载
                 if (this.actionChilds.has(remoteKey)) {
@@ -99,7 +99,10 @@ class ULANZIDeck {
         console.log("paramfromplugin uuid: ", actionUUID, " eventData: ", eventData);
         if (this.settingsCache[actionUUID]?.uuid === eventData.uuid) {
             // getSettingsAndThen的时候使用
-            this.settingsCache[actionUUID].param = {...this.settingsCache[actionUUID].param, ...eventData.param};
+            this.settingsCache[actionUUID].param = {
+                ...this.settingsCache[actionUUID].param,
+                ...eventData.param
+            };
         } else {
             this.settingsCache[actionUUID] = eventData;
         }
@@ -113,6 +116,12 @@ class ULANZIDeck {
     getActionId(uuid, key) {
         const data = this.settingsCache[getUniqueActionId(uuid, key)];
         return data?.actionid;
+    }
+
+    getPluginDataByActionid(actionid) {
+        return Object.keys(this.settingsCache)
+            .filter(key => this.settingsCache[key]?.actionid === actionid)
+            .map(key => this.settingsCache[key])[0] || {};
     }
 
     send(jsn) {

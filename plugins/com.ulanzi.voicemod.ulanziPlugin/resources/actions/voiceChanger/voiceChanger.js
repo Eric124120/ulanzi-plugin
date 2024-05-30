@@ -20,20 +20,18 @@ class VoiceChangerActionClass {
         this.actionUUID = actionUUID;
     }
 
-    updateSettings(context, settings) {
-        console.log("---- UPDATING INTERNAL SETTINGS ", context,  " - ", settings)
-        this.__buttonSettings[context] = {...settings};
+    updateSettings(actionid, settings) {
+        this.__buttonSettings[actionid] = {...settings};
     }
 
     saveSettings(context, key, actionid, settings) {
-        console.log("::: Saving settings for button ", context, ": ", settings)
-        this.updateSettings(context, settings)
+        this.updateSettings(actionid, settings)
         $UD.setSettings(context, key, actionid, settings)
         this.updateButtonState(context, key, settings)
     }
 
-    getCurrentSettings(context) {
-        return {...this.__buttonSettings[context]}
+    getCurrentSettings(actionid) {
+        return {...this.__buttonSettings[actionid]}
     }
 
     isActive(voiceId) {
@@ -54,8 +52,8 @@ class VoiceChangerActionClass {
     }
 
     __setActive(context, key, actionid, isActive) {
-        this.__buttonSettings[context]['is-active'] = isActive;
-        this.saveSettings(context, key, actionid, this.__buttonSettings[context])
+        this.__buttonSettings[actionid]['is-active'] = isActive;
+        this.saveSettings(context, key, actionid, this.__buttonSettings[actionid])
     }
     getSettingsAndThen(context, key, fn) {
         const data = $UD.settingsCache[getUniqueActionId(context, key)];
@@ -112,7 +110,7 @@ VoiceChangerAction.onSendToPlugin((data) => {
     const payload = data.payload;
     const context = data.uuid;
     const key = data.key;
-    const actionid = getUniqueActionId(context, key);
+    const actionid = data.actionid;
     console.log("send to  plugin received: ", payload.action)
     if(payload.action == 'setImage') {
         const img = 'data:image/png;base64,' + payload.payload.image
@@ -145,7 +143,7 @@ VoiceChangerAction.onSendToPlugin((data) => {
 
 VoiceChangerAction.onRun((evnt) => {
     const settings = evnt.param.settings;
-    const currentBtnSettings = VoiceChangerAction.getCurrentSettings(evnt.uuid)
+    const currentBtnSettings = VoiceChangerAction.getCurrentSettings(evnt.actionid)
 
     if(!currentBtnSettings['is-active']) {
         LOADING_VOICE = true
@@ -157,12 +155,13 @@ VoiceChangerAction.onRun((evnt) => {
    VoiceChangerAction.saveSettings(evnt.uuid, evnt.key, evnt.actionid, settings)
 
    //update all other buttons to be disabled 
-   let otherButtons = Object.keys(VoiceChangerAction.__buttonSettings).filter( key => key != evnt.uuid)
-   otherButtons.forEach(context => {
+   let otherButtons = Object.keys(VoiceChangerAction.__buttonSettings).filter( key => key != evnt.actionid)
+   otherButtons.forEach(actionid => {
+    const btn = $UD.getPluginDataByActionid(actionid);
     VoiceChangerAction.__setActive(
-        context,
-        evnt.key,
-        evnt.actionid,
+        btn.uuid,
+        btn.key,
+        btn.actionid,
         false
     )
    })
@@ -189,8 +188,8 @@ function parseSettings(__settings) {
 VoiceChangerAction.onWillAppear((evnt) => {
     let settings = parseSettings(evnt.param)
     let mySelectedVoice = settings['selected-voice']
-    Voicemod.onBitMapLoaded(evnt.uuid, ({actionID: voiceID, actionObject}) => {
-        let btnSettings = VoiceChangerAction.getCurrentSettings(evnt.uuid)
+    Voicemod.onBitMapLoaded(evnt.actionid, ({actionID: voiceID, actionObject}) => {
+        let btnSettings = VoiceChangerAction.getCurrentSettings(evnt.actionid)
 
         let voice = btnSettings? btnSettings['selected-voice'] : mySelectedVoice
 
@@ -210,7 +209,7 @@ VoiceChangerAction.onWillAppear((evnt) => {
 
 
     Voicemod.onGetCurrentVoice( ({actionObject}) => {
-        let btnSettings = VoiceChangerAction.getCurrentSettings(evnt.uuid)
+        let btnSettings = VoiceChangerAction.getCurrentSettings(evnt.actionid)
         if(btnSettings['selected-voice'] != actionObject.voiceID && btnSettings['is-active']) {
             btnSettings['is-active'] = false
             return VoiceChangerAction.saveSettings(evnt.uuid, evnt.key, evnt.actionid, btnSettings)
@@ -219,8 +218,8 @@ VoiceChangerAction.onWillAppear((evnt) => {
 
 
 
-    Voicemod.onVoiceLoaded(evnt.uuid, ({actionObject}) => {
-        let btnSettings = VoiceChangerAction.getCurrentSettings(evnt.uuid)
+    Voicemod.onVoiceLoaded(evnt.actionid, ({actionObject}) => {
+        let btnSettings = VoiceChangerAction.getCurrentSettings(evnt.actionid)
         if(btnSettings && (actionObject.voiceID == btnSettings['selected-voice'])) {
             btnSettings['is-active'] = true;
             LOADING_VOICE = false
@@ -230,11 +229,11 @@ VoiceChangerAction.onWillAppear((evnt) => {
     })
 
     Voicemod.onAllVoicesLoaded(() => {
-        let currentSettings = VoiceChangerAction.getCurrentSettings(evnt.uuid)
+        let currentSettings = VoiceChangerAction.getCurrentSettings(evnt.actionid)
         if(currentSettings && currentSettings['selected-voice']) {
             let voice = Voicemod.__voicesLists[VoiceLists.all].find( v => v.id == currentSettings['selected-voice'])
             currentSettings['button-images'] = voice.images
-            VoiceChangerAction.updateSettings(evnt.uuid, currentSettings)
+            VoiceChangerAction.updateSettings(evnt.actionid, currentSettings)
         }
         $UD.sendToPropertyInspector(evnt.uuid, evnt.key, evnt.actionid, {
             action: 'getVoices',
@@ -245,11 +244,11 @@ VoiceChangerAction.onWillAppear((evnt) => {
     VoiceChangerAction.getSettingsAndThen(evnt.uuid, evnt.key, (btnContext, __btnSettings) => {
         console.log("BUTTON SETTINGS FROM SD ", __btnSettings)
         let __settings = parseSettings(__btnSettings)
-        let internalSettings = VoiceChangerAction.getCurrentSettings(btnContext)
+        let internalSettings = VoiceChangerAction.getCurrentSettings(evnt.actionid)
         __settings['is-active'] = internalSettings['is-active']
  
 
-        VoiceChangerAction.updateSettings(btnContext, __settings)
+        VoiceChangerAction.updateSettings(evnt.actionid, __settings)
 
        VoiceChangerAction.updateButtonState(btnContext, evnt.key, __settings) //so we update the status of the button when changing pages
         //if we don't have the images yet, let's request them when the button shows on screen
@@ -270,5 +269,5 @@ VoiceChangerAction.onWillAppear((evnt) => {
 
 
 VoiceChangerAction.onWillDisappear((evnt) => {
-    Voicemod.removeEventListeners(evnt.uuid)
+    Voicemod.removeEventListeners(evnt.actionid)
 })
