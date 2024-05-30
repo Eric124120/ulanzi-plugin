@@ -33,7 +33,8 @@ $PI.onConnected((jsn) => {
         const payload = data.param;
         const globalSettings = window.getUlanziGlobalSettings();
         if (payload.settings) {
-            __SETTINGS = payload.settings
+            __SETTINGS = {...payload.settings}
+            _SETTINGS['is-active'] = false;
             $PI.sendToPlugin({
                 action: 'getVoices',
                 voiceId: __SETTINGS['selected-voice'],
