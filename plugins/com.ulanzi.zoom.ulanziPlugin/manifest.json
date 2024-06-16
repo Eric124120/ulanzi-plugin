@@ -1,0 +1,201 @@
+{
+  "Name":"Zoom",
+  "Icon":"resources/images/video-camera-plugin@2x.png",
+  "Author":"Ulanzi",
+  "Description":"Zoom action.",
+  "PrivateAPI":true,
+  "Version":"1.0.0",
+  "Category":"Zoom",
+  "CategoryIcon":"resources/images/video-camera@2x.png",
+  "CodePath":"main.html",
+  "Type": "JavaScript",
+  "SupportedInMultiActions": false,
+  "UUID":"com.ulanzi.ulanzideck.zoom",
+  "Actions":[
+    {
+      "Name":"Mute Toggle",
+      "UUID":"com.ulanzi.ulanzideck.zoom.mutetoggle",
+      "Icon":"resources/images/streamdeck-zoom-muted-actionicon@2x.png",
+      "PropertyInspectorPath":"resources/actions/muteToggle/index.html",
+      "State": 0,
+      "States":[
+        {
+          "Image":"resources/images/streamdeck-zoom-muted@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-unmuted@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-muted-closed@2x.png"
+        }
+      ],
+      "Tooltip":"Toggle Zoom Mute Status",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name":"Video Toggle",
+      "UUID":"com.ulanzi.ulanzideck.zoom.videotoggle",
+      "Icon":"resources/images/streamdeck-zoom-video-actionicon@2x.png",
+      "PropertyInspectorPath":"resources/actions/videoToggle/index.html",
+      "State": 0,
+      "States":[
+        {
+          "Image":"resources/images/streamdeck-zoom-video-stopped@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-video-started@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-video-closedd@2x.png"
+        }
+      ],
+      "Tooltip":"Toggle Zoom Video",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name":"Share Toggle",
+      "UUID":"com.ulanzi.ulanzideck.zoom.sharetoggle",
+      "Icon":"resources/images/streamdeck-zoom-share-actionicon@2x.png",
+      "PropertyInspectorPath":"resources/actions/zoomShare/index.html",
+      "State": 0,
+      "States":[
+        {
+          "Image":"resources/images/streamdeck-zoom-share-start@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-share-stop@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-share-closed@2x.png"
+        }
+      ],
+      "Tooltip":"Bring up the share screen window, or stop sharing",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name":"Focus",
+      "UUID":"com.ulanzi.ulanzideck.zoom.focus",
+      "Icon":"resources/images/streamdeck-zoom-focus-action@2x.png",
+      "PropertyInspectorPath":"resources/actions/zoomFocus/index.html",
+      "State": 0,
+      "States":[
+        {
+          "Image":"resources/images/streamdeck-zoom-focus@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-focus-closed@2x.png"
+        }
+      ],
+      "Tooltip":"Bring the Zoom window to the front",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name":"Leave Meeting",
+      "UUID":"com.ulanzi.ulanzideck.zoom.leave",
+      "Icon":"resources/images/streamdeck-zoom-leave-actionicon@2x.png",
+      "PropertyInspectorPath":"resources/actions/zoomLeave/index.html",
+      "State": 0,
+      "States":[
+        {
+          "Image":"resources/images/streamdeck-zoom-leave@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-leave-closed@2x.png"
+        }
+      ],
+      "Tooltip":"Leave an active meeting. If you're the host, this ends the meeting.",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name":"Cloud Record Toggle",
+      "UUID":"com.ulanzi.ulanzideck.zoom.recordcloudtoggle",
+      "Icon":"resources/images/streamdeck-zoom-record-cloud-actionicon@2x.png",
+      "PropertyInspectorPath":"resources/actions/zoomRecordcloudtoggle/index.html",
+      "State": 0,
+      "States":[
+        {
+          "Image":"resources/images/streamdeck-zoom-record-cloud-stopped@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-record-cloud-started@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-record-cloud-disabled@2x.png"
+        }
+      ],
+      "Tooltip":"Toggle Zoom Recording to the Cloud",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name":"Local Record Toggle",
+      "UUID":"com.ulanzi.ulanzideck.zoom.recordlocaltoggle",
+      "Icon":"resources/images/streamdeck-zoom-record-local-actionicon@2x.png",
+      "PropertyInspectorPath":"resources/actions/zoomRecordlocaltoggle/index.html",
+      "State": 0,
+      "States":[
+        {
+          "Image":"resources/images/streamdeck-zoom-record-local-stopped@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-record-local-started@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-record-local-disabled@2x.png"
+        }
+      ],
+      "Tooltip":"Toggle Zoom Recording to your local computer",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name":"Ask All to Unmute",
+      "UUID":"com.ulanzi.ulanzideck.zoom.unmuteall",
+      "Icon":"resources/images/streamdeck-zoom-unmuteall-actionicon@2x.png",
+      "PropertyInspectorPath":"resources/actions/zooMunmuteall/index.html",
+      "State": 0,
+      "States":[
+        {
+          "Image":"resources/images/streamdeck-zoom-unmuteall@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-unmuteall-disabled@2x.png"
+        }
+      ],
+      "Tooltip":"Ask all participants to unmute",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name":"Mute All Participants",
+      "UUID":"com.ulanzi.ulanzideck.zoom.muteall",
+      "Icon":"resources/images/streamdeck-zoom-muteall-actionicon@2x.png",
+      "PropertyInspectorPath":"resources/actions/zoomMuteall/index.html",
+      "State": 0,
+      "States":[
+        {
+          "Image":"resources/images/streamdeck-zoom-muteall@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-muteall-disabled@2x.png"
+        }
+      ],
+      "Tooltip":"Mute All Participants",
+      "SupportedInMultiActions": false
+    },
+    {
+      "Name":"Custom Shortcut",
+      "UUID":"com.ulanzi.ulanzideck.zoom.customshortcut",
+      "Icon":"resources/images/streamdeck-zoom-customshortcut-actionicon@2x.png",
+      "PropertyInspectorPath":"resources/actions/zoomCustomshortcut/index.html",
+      "State": 0,
+      "States":[
+        {
+          "Image":"resources/images/streamdeck-zoom-customshortcut@2x.png"
+        },
+        {
+          "Image":"resources/images/streamdeck-zoom-customshortcut-disabled@2x.png"
+        }
+      ],
+      "Tooltip":"Add a custom shortcut to do anything that Zoom supports",
+      "SupportedInMultiActions": false
+    }
+  ]
+}
