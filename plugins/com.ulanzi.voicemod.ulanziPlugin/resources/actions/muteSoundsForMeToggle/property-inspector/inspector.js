@@ -16,7 +16,7 @@ $PI.onDidReceiveSettings(actionUUID, ({payload}) => {
     updateVoicesUI()
     
 })
-$PI.connect(UlanzideckPort, ComUlanziUlanzideckVoicemodMutesoundsForMeToggle);
+$PI.connect(UlanzideckSocketPort, ComUlanziUlanzideckVoicemodMutesoundsForMeToggle);
 $PI.onConnected((jsn) => {
     $PI.onWillAppear((data) => {
         const payload = data.param;

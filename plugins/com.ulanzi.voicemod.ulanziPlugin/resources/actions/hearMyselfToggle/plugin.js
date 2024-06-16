@@ -3,8 +3,8 @@ const action = new Action(ComUlanziUlanzideckVoicemodHearMyselfToggle)
 
 let BUTTON_PRESSED = false
 
-function updateButtonBitmap(uuid, key, state) {
-    $UD.setState(uuid, key, (state === true) ? 1 : 0)
+function updateButtonBitmap(uuid, key, actionid, state) {
+    $UD.setState(uuid, key, actionid, (state === true) ? 1 : 0)
 }
 
 action.onRun((evnt) => {
@@ -18,11 +18,15 @@ action.onRun((evnt) => {
 //     Voicemod.sendMessageToServer('getHearMyselfStatus')
 // })
 
+action.onSetActive((evnt) => {
+    updateButtonBitmap(evnt.uuid, evnt.key, evnt.actionid, _MASTER_STATE)
+})
+
 action.onWillAppear((evnt) => {
     Voicemod.sendMessageToServer('getHearMyselfStatus')
     //any prep for this action should go here...
     Voicemod.onToggleHearMyVoice((payload) => {
-        updateButtonBitmap(evnt.uuid, evnt.key, payload.actionObject.value)
+        updateButtonBitmap(evnt.uuid, evnt.key, evnt.actionid, payload.actionObject.value)
     })
     //any prep for this action should go here...
     Voicemod.onHearMyselfDisabled((payload) => {

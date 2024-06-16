@@ -7,7 +7,7 @@ let __SETTINGS = {}
 let __UI_STATUS = null;
 
 
-$PI.connect(UlanzideckPort, ComUlanziUlanzideckVoicemodHearMyselfToggle);
+$PI.connect(UlanzideckSocketPort, ComUlanziUlanzideckVoicemodHearMyselfToggle);
 $PI.onConnected((jsn) => {
 
 

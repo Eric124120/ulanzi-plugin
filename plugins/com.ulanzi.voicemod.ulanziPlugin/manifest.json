@@ -1,240 +1,256 @@
 {
   "Name":"Voicemod",
-  "Icon":"resources/images/category-voicemod-logo@2x.png",
+  "Icon":"resources/images/category-voicemod-logo.png",
   "Author":"Ulanzi",
   "Description":"Voicemod action.",
   "PrivateAPI":true,
-  "Version":"0.0.1",
-  "Category":"Ulanzi Deck",
+  "Version":"1.0.0",
+  "Category":"Voicemod",
   "CategoryIcon":"resources/images/categoryIcon.png",
   "CodePath":"main.html",
   "Type": "JavaScript",
+  "SupportedInMultiActions": false,
   "UUID":"com.ulanzi.ulanzideck.voicemod",
   "Actions":[
     {
       "Name":"Voice Changer",
       "UUID":"com.ulanzi.ulanzideck.voicemod.changer",
-      "Icon":"resources/images/action-select-voice@2x.png",
+      "Icon":"resources/images/action-select-voice.png",
       "PropertyInspectorPath":"resources/actions/voiceChanger/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/action-select-voice@2x.png"
+          "Image":"resources/images/action-select-voice.png"
         }
       ],
-      "Tooltip":"This action lets you select the voice changer you want"
+      "Tooltip":"This action lets you select the voice changer you want",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Voice Changer On/Off",
       "UUID":"com.ulanzi.ulanzideck.voicemod.changerToggle",
-      "Icon":"resources/images/action-voice-changer@2x.png",
+      "Icon":"resources/images/action-voice-changer.png",
       "PropertyInspectorPath":"resources/actions/voiceChangerToggle/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/key-voice-changer-off-off@2x.png"
+          "Image":"resources/images/key-voice-changer-off-off.png"
         },
         {
-          "Image":"resources/images/key-voice-changer-on-on@2x.png"
+          "Image":"resources/images/key-voice-changer-on-on.png"
         }
       ],
-      "Tooltip":"This action lets you toggle the voice changer feature on the app"
+      "Tooltip":"This action lets you toggle the voice changer feature on the app",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Voice Changer On",
       "UUID":"com.ulanzi.ulanzideck.voicemod.changerOn",
-      "Icon":"resources/images/action-voice-changer-on@2x.png",
+      "Icon":"resources/images/action-voice-changer-on.png",
       "PropertyInspectorPath":"resources/actions/voiceChangerOn/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/key-voice-changer-on-off@2x.png"
+          "Image":"resources/images/key-voice-changer-on-off.png"
         },
         {
-          "Image":"resources/images/key-voice-changer-on-on@2x.png"
+          "Image":"resources/images/key-voice-changer-on-on.png"
         }
       ],
-      "Tooltip":"This action lets you turn on the voice changer feature on the app"
+      "Tooltip":"This action lets you turn on the voice changer feature on the app",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Voice Changer Off",
       "UUID":"com.ulanzi.ulanzideck.voicemod.changerOff",
-      "Icon":"resources/images/action-voice-changer-off@2x.png",
+      "Icon":"resources/images/action-voice-changer-off.png",
       "PropertyInspectorPath":"resources/actions/voiceChangerOff/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/key-voice-changer-off-off@2x.png"
+          "Image":"resources/images/key-voice-changer-off-off.png"
         },
         {
-          "Image":"resources/images/key-voice-changer-off-on@2x.png"
+          "Image":"resources/images/key-voice-changer-off-on.png"
         }
       ],
-      "Tooltip":"This action lets you turn off the voice changer feature on the app"
+      "Tooltip":"This action lets you turn off the voice changer feature on the app",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Activate Voice Changer / Push to Talk",
       "UUID":"com.ulanzi.ulanzideck.voicemod.changerPushToTalk",
-      "Icon":"resources/images/action-push-voice-changer@2x.png",
+      "Icon":"resources/images/action-push-voice-changer.png",
       "PropertyInspectorPath":"resources/actions/pushToTalk/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/key-voice-changer-on-1@2x.png"
+          "Image":"resources/images/key-voice-changer-on-1.png"
         },
         {
-          "Image":"resources/images/key-voice-changer-on-on@2x.png"
+          "Image":"resources/images/key-voice-changer-on-on.png"
         }
       ],
-      "Tooltip":"This action lets you toggle the voice changer feature on the app while pressing the key"
+      "Tooltip":"This action lets you toggle the voice changer feature on the app while pressing the key",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Hear Myself On/Off",
       "UUID":"com.ulanzi.ulanzideck.voicemod.hearMyselfToggle",
-      "Icon":"resources/images/action-hear-my-voice@2x.png",
+      "Icon":"resources/images/action-hear-my-voice.png",
       "PropertyInspectorPath":"resources/actions/hearMyselfToggle/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/key-hear-my-voice-off@2x.png"
+          "Image":"resources/images/key-hear-my-voice-off.png"
         },
         {
-          "Image":"resources/images/key-hear-my-voice-on@2x.png"
+          "Image":"resources/images/key-hear-my-voice-on.png"
         }
       ],
-      "Tooltip":"This action lets you trun on and off the Hear Myself functionality"
+      "Tooltip":"This action lets you trun on and off the Hear Myself functionality",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Hear Myself On",
       "UUID":"com.ulanzi.ulanzideck.voicemod.hearMyselfOn",
-      "Icon":"resources/images/action-hear-myself-on@2x.png",
+      "Icon":"resources/images/action-hear-myself-on.png",
       "PropertyInspectorPath":"resources/actions/hearMyselfOn/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/key-hear-myself-on-off@2x.png"
+          "Image":"resources/images/key-hear-myself-on-off.png"
         },
         {
-          "Image":"resources/images/key-hear-myself-on-on@2x.png"
+          "Image":"resources/images/key-hear-myself-on-on.png"
         }
       ],
-      "Tooltip":"This action lets you trun on the Hear Myself functionality"
+      "Tooltip":"This action lets you trun on the Hear Myself functionality",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Hear Myself Off",
       "UUID":"com.ulanzi.ulanzideck.voicemod.hearMyselfOff",
-      "Icon":"resources/images/action-hear-myself-off@2x.png",
+      "Icon":"resources/images/action-hear-myself-off.png",
       "PropertyInspectorPath":"resources/actions/hearMyselfOn/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/key-hear-myself-off-off@2x.png"
+          "Image":"resources/images/key-hear-myself-off-off.png"
         },
         {
-          "Image":"resources/images/key-hear-myself-off-on@2x.png"
+          "Image":"resources/images/key-hear-myself-off-on.png"
         }
       ],
-      "Tooltip":"This action lets you trun off the Hear Myself functionality"
+      "Tooltip":"This action lets you trun off the Hear Myself functionality",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Background Effects On/Off",
       "UUID":"com.ulanzi.ulanzideck.voicemod.backgroundswitch",
-      "Icon":"resources/images/action-ambient-sound@2x.png",
+      "Icon":"resources/images/action-ambient-sound.png",
       "PropertyInspectorPath":"resources/actions/backgroundEffectsToggle/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/key-ambient-sound-off@2x.png"
+          "Image":"resources/images/key-ambient-sound-off.png"
         },
         {
-          "Image":"resources/images/key-ambient-sound-on@2x.png"
+          "Image":"resources/images/key-ambient-sound-on.png"
         }
       ],
-      "Tooltip":"This action lets you trun On and Off the background effects"
+      "Tooltip":"This action lets you trun On and Off the background effects",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Mute Mic On/Off",
       "UUID":"com.ulanzi.ulanzideck.voicemod.muteSwitch",
-      "Icon":"resources/images/action-mute-sounds@2x.png",
+      "Icon":"resources/images/action-mute-sounds.png",
       "PropertyInspectorPath":"resources/actions/muteToggle/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/key-mute-sounds-off@2x.png"
+          "Image":"resources/images/key-mute-sounds-off.png"
         },
         {
-          "Image":"resources/images/key-mute-sounds-on@2x.png"
+          "Image":"resources/images/key-mute-sounds-on.png"
         }
       ],
-      "Tooltip":"This action lets you trun On and Off the microhpone"
+      "Tooltip":"This action lets you trun On and Off the microhpone",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Random Voice",
       "UUID":"com.ulanzi.ulanzideck.voicemod.randomVoice",
-      "Icon":"resources/images/action-random-voice@2x.png",
+      "Icon":"resources/images/action-random-voice.png",
       "PropertyInspectorPath":"resources/actions/randomVoice/property-inspector/inspector.html",
       "State":"0",
       "States":[
         {
-          "Image":"resources/images/key-random-voice-idle@2x.png"
+          "Image":"resources/images/key-random-voice-idle.png"
         }
       ],
-      "Tooltip":"This action lets you select a random voice filter"
+      "Tooltip":"This action lets you select a random voice filter",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Instant Censor Beep",
       "UUID":"com.ulanzi.ulanzideck.voicemod.bleep",
-      "Icon":"resources/images/action-push-bad-language@2x.png",
+      "Icon":"resources/images/action-push-bad-language.png",
       "PropertyInspectorPath":"resources/actions/bleep/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/key-push-bad-language-on-2@2x.png"
+          "Image":"resources/images/key-push-bad-language-on-2.png"
         }
       ],
-      "Tooltip":"This action turns on the BEEP sound while the button is pressed"
+      "Tooltip":"This action turns on the BEEP sound while the button is pressed",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Soundboard",
       "UUID":"com.ulanzi.ulanzideck.voicemod.soundboard",
-      "Icon":"resources/images/action-add-sound@2x.png",
+      "Icon":"resources/images/action-add-sound.png",
       "PropertyInspectorPath":"resources/actions/soundboard/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/key-new-sound@2x.png"
+          "Image":"resources/images/key-new-sound.png"
         }
       ],
-      "Tooltip":"This action plays a single sound from the soundboard"
+      "Tooltip":"This action plays a single sound from the soundboard",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Stop All Soundboard Sounds",
       "UUID":"com.ulanzi.ulanzideck.voicemod.stopallsounds",
-      "Icon":"resources/images/action-stop-all-sounds@2x.png",
+      "Icon":"resources/images/action-stop-all-sounds.png",
       "PropertyInspectorPath":"resources/actions/stopAllSounds/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/key-stop-all-sounds@2x.png"
+          "Image":"resources/images/key-stop-all-sounds.png"
         }
       ],
-      "Tooltip":"This action stops all active sounds from the current soundboard"
+      "Tooltip":"This action stops all active sounds from the current soundboard",
+      "SupportedInMultiActions": false
     },
     {
       "Name":"Mute Sounds for Me On/Off",
       "UUID":"com.ulanzi.ulanzideck.voicemod.mutesoundsForMeToggle",
-      "Icon":"resources/images/action-mute-for-me@2x.png",
+      "Icon":"resources/images/action-mute-for-me.png",
       "PropertyInspectorPath":"resources/actions/muteSoundsForMeToggle/property-inspector/inspector.html",
       "State": 0,
       "States":[
         {
-          "Image":"resources/images/key-mute-for-me-idle@2x.png"
+          "Image":"resources/images/key-mute-for-me-idle.png"
         },
         {
-          "Image":"resources/images/key-mute-for-me-on@2x.png"
+          "Image":"resources/images/key-mute-for-me-on.png"
         }
       ],
-      "Tooltip":"This action toggles the Sounds for yo"
+      "Tooltip":"This action toggles the Sounds for yo",
+      "SupportedInMultiActions": false
     }
   ]
 }

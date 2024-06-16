@@ -83,6 +83,7 @@ const Events = {
 	touchTap: 'touchTap',
 	setFeedback: 'setFeedback',
 	setFeedbackLayout: 'setFeedbackLayout',
+	setActive: 'setActive'
 };
 
 /**
@@ -112,7 +113,6 @@ const VoicemodLicenseType = {
 	free: 'free'
 }
 
-const UlanzideckPort = 3906;
 const UlanzideckPluginUUID = 'com.ulanzi.ulanzideck.voicemod';
 const ComUlanziUlanzideckVoicemodChanger = 'com.ulanzi.ulanzideck.voicemod.changer';
 const ComUlanziUlanzideckVoicemodChangerToggle = 'com.ulanzi.ulanzideck.voicemod.changerToggle';
@@ -136,4 +136,9 @@ const voicemodetGlobalSettings = 30 * 1000;
 
 // storage key
 const GLOBAL_SETTINGS_KEY = 'GLOBAL_SETTINGS_KEY';
+
+// 获取socket地址
+const searchParams = new URLSearchParams(window.location.search);
+const UlanzideckSocketPort = searchParams.get('port') || 3906;
+const UlanzideckSocketAddress= searchParams.get('address') || '127.0.0.1';
 

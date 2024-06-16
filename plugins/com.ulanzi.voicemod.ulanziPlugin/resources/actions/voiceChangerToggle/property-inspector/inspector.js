@@ -11,7 +11,7 @@ let __SETTINGS = {}
 
 let __UI_STATUS = null;
 
-$PI.connect(UlanzideckPort, ComUlanziUlanzideckVoicemodChangerToggle);
+$PI.connect(UlanzideckSocketPort, ComUlanziUlanzideckVoicemodChangerToggle);
 $PI.onConnected((jsn) => {
 
     $PI.onWillAppear((data) => {

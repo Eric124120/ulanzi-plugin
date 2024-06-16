@@ -9,7 +9,7 @@ let __SETTINGS = {
 
 let __UI_STATUS = null;
 
-$PI.connect(UlanzideckPort, ComUlanziUlanzideckVoicemodRandomVoice);
+$PI.connect(UlanzideckSocketPort, ComUlanziUlanzideckVoicemodRandomVoice);
 $PI.onConnected((jsn) => {
 
     $PI.onWillAppear((data) => {

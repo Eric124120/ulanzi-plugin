@@ -5,7 +5,7 @@
 let __VOICES = null;
 let __SETTINGS = {}
 
-$PI.connect(UlanzideckPort, ComUlanziUlanzideckVoicemodStopallsounds);
+$PI.connect(UlanzideckSocketPort, ComUlanziUlanzideckVoicemodStopallsounds);
 $PI.onConnected((jsn) => {
 
     $PI.onWillAppear((data) => {

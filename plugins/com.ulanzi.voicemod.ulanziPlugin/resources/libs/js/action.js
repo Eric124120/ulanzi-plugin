@@ -302,6 +302,14 @@ class ULANZIAction {
 		this.on(`${this.UUID}.${Events.sendToPlugin}`, (jsn) => fn(jsn));
 		return this;
 	}
+	onSetActive(fn) {
+        if (!fn) {
+			console.error('A callback function for setactive run event is required for onSetActive.');
+		}
+
+		this.on(`${this.UUID}.${Events.setActive}`, (jsn) => fn(jsn));
+		return this;
+    }
 }
 
 window.Action = ULANZIAction;

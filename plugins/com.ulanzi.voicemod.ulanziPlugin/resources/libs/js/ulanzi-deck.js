@@ -7,7 +7,7 @@ class ULANZIDeck {
 	actionChilds = new Map();
 	settingsCache = {};
     websocket = null;
-    port = '3906';
+    port = UlanzideckSocketPort;
     uuid = 'com.ulanzi.ulanzideck.voicemod';
     on = EventEmitter.on;
     emit = EventEmitter.emit;
@@ -21,8 +21,7 @@ class ULANZIDeck {
     connected(port, uuid) {
         if (port) this.port = port;
         if (uuid) this.uuid = uuid;
-
-        this.websocket = new WebSocket("ws://127.0.0.1:" + this.port);
+        this.websocket = new WebSocket(`ws://${UlanzideckSocketAddress}:${this.port}`);
         this.websocket.onopen = () => {
             let json = {
                 code: "0",
@@ -39,8 +38,6 @@ class ULANZIDeck {
             let uuid = jsonObj["uuid"];
             let remoteKey = jsonObj["key"];
             let actionid = jsonObj["actionid"];
-            let actionUUID = getUniqueActionId(uuid, remoteKey);
-            console.log('<---->message:', jsonObj);
             if (!actionid) {
                 actionid = getUniqueActionId(uuid, remoteKey);
                 jsonObj["actionid"] = actionid;
@@ -50,18 +47,20 @@ class ULANZIDeck {
                 this.emit(`${uuid}.${Events.run}`, jsonObj)
             } else if (event === "add") {
                 // 初始化加载
-                this.willAppear(uuid, jsonObj);
+                this.willAppear(jsonObj);
+            }  else if (event === "setactive") {
+                this.setActive(jsonObj);
             } else if (event === "paramfromapp") {
                 // 插件功能被加载的时候(设置插件功能参数)
-                if (!this.actionChilds.has(remoteKey)) {
-                    this.actionChilds.set(remoteKey, actionUUID)
-                    this.willAppear(uuid, jsonObj);
+                if (!this.actionChilds.has(actionid)) {
+                    this.actionChilds.set(actionid, actionid)
+                    this.willAppear(jsonObj);
                 }
             } else if (event === "clear") {
                 // 插件卸载
-                if (this.actionChilds.has(remoteKey)) {
-                    this.actionChilds.delete(remoteKey)
-                    this.willDisappear(actionUUID, jsonObj);
+                if (this.actionChilds.has(actionid)) {
+                    this.actionChilds.delete(actionid)
+                    this.willDisappear(actionid, jsonObj);
                 }
 
             } else if (event === "clearAll") {
@@ -74,7 +73,7 @@ class ULANZIDeck {
             } else if (event === "state") {
                 // 插件的图标显示需要发生变化的时候
             }  else if (event === "paramfromplugin") {
-                this.paramfromplugin(actionUUID, jsonObj);
+                this.paramfromplugin(actionid, jsonObj);
 			} else {
                 console.log('------->', jsonObj)
             }
@@ -84,38 +83,35 @@ class ULANZIDeck {
             this.connected(this.port, this.uuid);
         };
     }
-    willAppear(actionUUID, eventData) {
-        console.log("willAppear uuid: ", actionUUID, " eventData: ", eventData);
-        this.settingsCache[getUniqueActionId(eventData.uuid, eventData.key)] = eventData;
+    willAppear(eventData) {
+        this.settingsCache[eventData.actionid] = eventData;
         // 插件被加载时触发
-        this.emit(`${actionUUID}.${Events.willAppear}`, eventData);
+        this.emit(`${eventData.uuid}.${Events.willAppear}`, eventData);
     }
-    willDisappear(actionId, data) {
-        console.log("willDisappear actionId: ", actionId, " settings: ", data);
-        window.removeUlanziPluginSettings(data.uuid, data.key);
-        delete this.settingsCache[actionId];
+    setActive(eventData) {
+        if (!eventData.active) return;
+        // 插件被加载时触发
+        this.emit(`${eventData.uuid}.${Events.setActive}`, eventData);
     }
-    paramfromplugin(actionUUID, eventData) {
-        console.log("paramfromplugin uuid: ", actionUUID, " eventData: ", eventData);
-        if (this.settingsCache[actionUUID]?.uuid === eventData.uuid) {
+    willDisappear(_actionid, data) {
+        window.removeUlanziPluginSettings(_actionid);
+        delete this.settingsCache[_actionid];
+    }
+    paramfromplugin(_actionid, eventData) {
+        if (this.settingsCache[_actionid]?.uuid === eventData.uuid) {
             // getSettingsAndThen的时候使用
-            this.settingsCache[actionUUID].param = {
-                ...this.settingsCache[actionUUID].param,
+            this.settingsCache[_actionid].param = {
+                ...this.settingsCache[_actionid].param,
                 ...eventData.param
             };
         } else {
-            this.settingsCache[actionUUID] = eventData;
+            this.settingsCache[_actionid] = eventData;
         }
         if (eventData?.eventType === Events.setGlobalSettings) {
             this.emit(`${eventData.uuid}.${Events.didReceiveGlobalSettings}`, eventData);
         } else if (eventData?.eventType === Events.sendToPlugin) {
             this.emit(`${eventData.uuid}.${Events.sendToPlugin}`, eventData);
         }
-    }
-    
-    getActionId(uuid, key) {
-        const data = this.settingsCache[getUniqueActionId(uuid, key)];
-        return data?.actionid;
     }
 
     getPluginDataByActionid(actionid) {
@@ -155,10 +151,10 @@ class ULANZIDeck {
      * 设置图标(使⽤manifest.json配置⾥的图标列表编号)
      * @param {string} uuid 插件id
      * @param {string} key 上位机按键key
+     * @param {string} actionid 上位机按键key
      * @param {number} inState 图标列表数组编号。请对照manifest.json
      */
-     setState(uuid, key, inState) {
-        const actionid = this.getActionId(uuid, key);
+     setState(uuid, key, actionid, inState) {
         this.send({
             cmd: 'state',
             param: {
@@ -182,8 +178,7 @@ class ULANZIDeck {
      * @param {string} key 上位机按键key
      * @param {string} base64Str 使⽤⾃定义图标
      */
-    setImage(uuid, key, base64Str) {
-        const actionid = this.getActionId(uuid, key);
+    setImage(uuid, key, actionid, base64Str) {
         this.send({
             cmd: 'state',
             param: {
@@ -207,8 +202,7 @@ class ULANZIDeck {
      * @param {string} key 上位机按键key
      * @param {string} path 本地图片地址
      */
-    setPath(uuid, key, path) {
-        const actionid = this.getActionId(uuid, key);
+    setPath(uuid, key, actionid, path) {
         this.send({
             cmd: 'state',
             param: {
@@ -232,8 +226,7 @@ class ULANZIDeck {
      * @param {string} key 上位机按键key
      * @param {string} gifdata 自定义gif的base64版面数据
      */
-    setGifdata(uuid, key, gifdata) {
-        const actionid = this.getActionId(uuid, key);
+    setGifdata(uuid, key, actionid, gifdata) {
         this.send({
             cmd: 'state',
             param: {
@@ -257,7 +250,7 @@ class ULANZIDeck {
      * @param {string} key 上位机按键key
      * @param {string} gifpath 本地gif图⽚⽂件地址
      */
-    setGifdata(key, gifpath) {
+    setGifdata(uuid, key, actionid, gifpath) {
         this.send({
             cmd: 'state',
             param: {
@@ -265,6 +258,7 @@ class ULANZIDeck {
                     {
                         uuid,
                         key,
+                        actionid,
                         /** type 0-使⽤配置⾥的图标列表编号，请对照manifest.json。 1-使⽤⾃定义图标。2-使⽤本地图⽚⽂件，3-使⽤⾃定义的动图，4-使⽤本地gif⽂件 */ 
                         type: 4,
                         gifpath,
@@ -284,7 +278,7 @@ class ULANZIDeck {
 
     /** 插件参数设置 */
     setSettings(uuid, key, actionid, payload) {
-        window.setUlanziPluginSettings(this.uuid, this.key, payload);
+        window.setUlanziPluginSettings(actionid, payload);
         this.sendPluginEvent(uuid, key, actionid, Events.setSettings, {
 			settings: payload,
         })
@@ -317,21 +311,6 @@ class ULANZIDeck {
 
         return this.on(Events.connected, (jsn) => fn(jsn));
     }
-    /**
-     * 当添加插件被加载的时候触发
-     * @param {*} actionUUID 
-     * @param {*} fn 
-     * @returns 
-     */
-    onWillAppear(actionUUID, fn) {
-        if(!fn) {
-            console.error(
-                'A callback function for the willAppear event is required for onWillAppear.'
-            );
-        }
-
-        return this.on(`${actionUUID}.${Events.willAppear}`, (jsn) => fn(jsn));
-    }
 };
 window.$UD = new ULANZIDeck();
-$UD.connected(UlanzideckPort, UlanzideckPluginUUID);
+$UD.connected(UlanzideckSocketPort, UlanzideckPluginUUID);

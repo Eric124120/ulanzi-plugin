@@ -22,7 +22,7 @@ const VoiceTypes = {
     custom: 'customVoices'
 }
 
-$PI.connect(UlanzideckPort, ComUlanziUlanzideckVoicemodChanger);
+$PI.connect(UlanzideckSocketPort, ComUlanziUlanzideckVoicemodChanger);
 
 $PI.onConnected((jsn) => {
     uuid = jsn['uuid'];
@@ -34,7 +34,7 @@ $PI.onConnected((jsn) => {
         const globalSettings = window.getUlanziGlobalSettings();
         if (payload.settings) {
             __SETTINGS = {...payload.settings}
-            _SETTINGS['is-active'] = false;
+            __SETTINGS['is-active'] = false;
             $PI.sendToPlugin({
                 action: 'getVoices',
                 voiceId: __SETTINGS['selected-voice'],

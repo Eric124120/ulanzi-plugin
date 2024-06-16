@@ -7,7 +7,7 @@ let __VOICES = null;
 let __SETTINGS = {}
 let __UI_STATUS = null;
 
-$PI.connect(UlanzideckPort, ComUlanziUlanzideckVoicemodBleep);
+$PI.connect(UlanzideckSocketPort, ComUlanziUlanzideckVoicemodBleep);
 $PI.onConnected((jsn) => {
 
     $PI.onWillAppear((data) => {

@@ -3,8 +3,8 @@
 
     let BUTTON_PRESSED = false
 
-    function updateButtonBitmap(uuid, key, value) {
-        $UD.setState(uuid, key, (value === true) ? 1 : 0)
+    function updateButtonBitmap(uuid, key, actionid, value) {
+        $UD.setState(uuid, key, actionid, (value === true) ? 1 : 0)
     }
 
     action.onRun((evnt) => {
@@ -16,11 +16,13 @@
     //     BUTTON_PRESSED = false
     //     Voicemod.sendMessageToServer('getVoiceChangerStatus')
     // })
-
+    action.onSetActive((evnt) => {
+        Voicemod.sendMessageToServer('getVoiceChangerStatus')
+    })
     action.onWillAppear((evnt) => {
         Voicemod.sendMessageToServer('getVoiceChangerStatus')
         Voicemod.onToggleVoiceChanger((payload) => {
-            updateButtonBitmap(evnt.uuid, evnt.key, payload.actionObject.value)
+            updateButtonBitmap(evnt.uuid, evnt.key, evnt.actionid, payload.actionObject.value)
         })
         //any prep for this action should go here...
         Voicemod.onVoiceChangerDisabled((payload) => {

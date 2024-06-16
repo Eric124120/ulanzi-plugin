@@ -11,31 +11,31 @@ class SoundboardActionClass {
         this.actionUUID = actionUUID;
     }
 
-    updateSettings(context, settings) {
-        this.__buttonSettings[context] = settings;
+    updateSettings(actionid, settings) {
+        this.__buttonSettings[actionid] = settings;
     }
 
-    getCurrentSettings(context) {
-        return this.__buttonSettings[context]
+    getCurrentSettings(actionid) {
+        return this.__buttonSettings[actionid]
     }
 
-    saveSettings(context, key, action, settings) {
-        this.updateSettings(context, settings)
-        $UD.setSettings(context,key, action, settings)
+    saveSettings(uuid, key, actionid, settings) {
+        this.updateSettings(actionid, settings)
+        $UD.setSettings(uuid, key, actionid, settings)
     }
 
-    isActive(voiceId) {
-        return this.__buttonSettings[voiceId].active
+    isActive(actionid) {
+        return this.__buttonSettings[actionid].active
     }
 
-    addButtonSetting(id, settings) {
+    addButtonSetting(actionid, settings) {
         settings.active = false
-        this.__buttonSettings[id] = settings
+        this.__buttonSettings[actionid] = settings
     }
 
-    __setActive(context, key, actionid, isActive) {
-        this.__buttonSettings[context]['is-active'] = isActive;
-        this.saveSettings(context, key, actionid, this.__buttonSettings[context])
+    __setActive(uuid, key, actionid, isActive) {
+        this.__buttonSettings[actionid]['is-active'] = isActive;
+        this.saveSettings(uuid, key, actionid, this.__buttonSettings[actionid])
     }
 
     onWillAppear(fn) {
@@ -70,9 +70,9 @@ class SoundboardActionClass {
 		return this;
 	}
 
-    getSettingsAndThen(uuid, key, fn) {
-        const data = $UD.settingsCache[getUniqueActionId(uuid, key)];
-        if (uuid == data.uuid) {
+    getSettingsAndThen(actionid, fn) {
+        const data = $UD.settingsCache[actionid];
+        if (actionid == data.actionid) {
             fn(data.uuid, data.param.settings || {});
         }
     }
@@ -93,62 +93,70 @@ class SoundboardActionClass {
 		this.on(`${this.actionUUID}.${Events.runAfter}`, (jsn) => fn(jsn));
 		return this;
     }
+    onSetActive(fn) {
+        if (!fn) {
+			console.error('A callback function for setactive run event is required for onSetActive.');
+		}
+
+		this.on(`${this.actionUUID}.${Events.setActive}`, (jsn) => fn(jsn));
+		return this;
+    }
 }
 
 
 const SoundboardAction = new SoundboardActionClass(ComUlanziUlanzideckVoicemodSoundboard)
 
 
-function loadMyBitMap(context, key, img) {
-    return $UD.setImage(context, key, 'data:image/png;base64,' + img)
+function loadMyBitMap(uuid, key, actionid, img) {
+    return $UD.setImage(uuid, key, actionid, 'data:image/png;base64,' + img)
 }
 
 SoundboardAction.onSendToPlugin((data) => {
 
     console.log("EVent received from PI: ")
     const payload = data.payload;
-    const context = data.uuid;
+    const uuid = data.uuid;
     const key = data.key;
-    const actionid = getUniqueActionId(context, key);
+    const actionid = data.actionid;
     console.log("send to  plugin received: ", payload.action)
     if(payload.action == 'getSoundboards') {
         console.log("Sending list of sounds to PI:")
         console.log(Voicemod.__soundLists)
-        return $UD.sendToPropertyInspector(context, key, actionid, {
+        return $UD.sendToPropertyInspector(uuid, key, actionid, {
             action: 'getSoundboards',
             soundboards: Voicemod.__soundLists
         })
     }
     if(payload.action == 'setImage') {
         console.log('setting action image')
-        return loadMyBitMap(context, key, payload.payload.image)
+        return loadMyBitMap(uuid, key, actionid, payload.payload.image)
     }
 
     if(payload.action == 'retrieveSoundBitmap') {
         if(!payload.payload.currentSettings['button-images']) {
-            Voicemod.onBitMapLoaded(context + "-tmp", ({ actionObject}) => {
-                loadMyBitMap(context, key, actionObject.result?.default)
-                Voicemod.removeEventListeners(context + "-tmp")
+            Voicemod.onBitMapLoaded(actionid + "-tmp", ({ actionObject}) => {
+                loadMyBitMap(uuid, key, actionid, actionObject.result?.default)
+                Voicemod.removeEventListeners(actionid + "-tmp")
                 Voicemod.__soundLists[payload.payload.currentSettings['selected-profile']].sounds.forEach ((s, idx) => {
                     if(s.id == payload.payload.currentSettings['selected-sound']) {
                         Voicemod.__soundLists[payload.payload.currentSettings['selected-profile']].sounds[idx].updated = true
                     }
                 })
                 //update the list on the property inspector so it has the image data as well
-                $UD.sendToPropertyInspector(context, key, actionid, {
+                $UD.sendToPropertyInspector(uuid, key, actionid, {
                     action: 'getSoundboards',
                     soundboards: Voicemod.__soundLists
                 })
             })
         }
-        requestBitMap({"my-context": context, 'my-key': key, ...payload.payload.currentSettings})
+        requestBitMap({uuid, key, actionid, ...payload.payload.currentSettings})
     }
 
 })
 
 SoundboardAction.onRun((evnt) => {
    const settings = evnt.param.settings
-
+   SoundboardAction.saveSettings(evnt.uuid, evnt.key, evnt.actionid, settings)
    Voicemod.sendMessageToServer('playMeme', settings['selected-sound'])
 })
 
@@ -179,38 +187,39 @@ function parseSettings(settings) {
 SoundboardAction.onWillDisappear((evnt) => {
     Voicemod.removeEventListeners(evnt.uuid)
 })
-
+SoundboardAction.onSetActive((evnt) => {
+    let btnSettings = SoundboardAction.getCurrentSettings(evnt.actionid);
+    let pluginBtnSettings = window.getUlanziPluginSettings(evnt.actionid) || {};
+    requestBitMap({uuid: evnt.uuid, key:  evnt.key, actionid: evnt.actionid, ...btnSettings, ...pluginBtnSettings})
+})
 SoundboardAction.onWillAppear((evnt) => {
 
 
-    SoundboardAction.getSettingsAndThen(evnt.uuid, evnt.key, (buttonContext, currentButtonSettings) => {
+    SoundboardAction.getSettingsAndThen(evnt.actionid, (buttonContext, currentButtonSettings) => {
         currentButtonSettings = parseSettings(currentButtonSettings)
-        SoundboardAction.saveSettings(buttonContext, evnt.key, evnt.actionid, currentButtonSettings)
-       //we might not have the images yet, let's request them when the button shows on screen
-       console.log("Button settings received (", buttonContext,"): ", currentButtonSettings)
+        SoundboardAction.saveSettings(evnt.uuid, evnt.key, evnt.actionid, currentButtonSettings)
         if(!Voicemod.connected) {
             Voicemod.onConnected(buttonContext, () => {
-                console.log("calling requestBitMap after VM connection is ready")
-                requestBitMap({...currentButtonSettings, 'my-key': evnt.key})
+                requestBitMap({uuid: evnt.uuid, key:  evnt.key, actionid: evnt.actionid, ...currentButtonSettings})
             })
         } else {
-            console.log("Calling requestBitMap because VM is connected")
-            requestBitMap({...currentButtonSettings, 'my-key': evnt.key})
+            requestBitMap({uuid: evnt.uuid, key:  evnt.key, actionid: evnt.actionid, ...currentButtonSettings})
         }
     })
 
     Voicemod.onBitMapLoaded(evnt.uuid, ({ actionObject}) => {
-        SoundboardAction.getSettingsAndThen(evnt.uuid, evnt.key, (buttonContext, currentButtonSettings) => {
+        SoundboardAction.getSettingsAndThen(evnt.actionid, (buttonContext, currentButtonSettings) => {
             if(typeof actionObject.memeId != "undefined" && actionObject.memeId == currentButtonSettings['selected-sound']) { //the moment we have the right bitmap, let's set it on the key
-            //if(actionObject.context == evnt.context) {
                 if(actionObject.result?.default) {
-                    loadMyBitMap(buttonContext, evnt.key, actionObject.result.default)
+                    loadMyBitMap(evnt.uuid, evnt.key, evnt.actionid, actionObject.result.default)
                     currentButtonSettings['button-images'] = actionObject.result
-                    currentButtonSettings['my-context'] = buttonContext
+                    currentButtonSettings['uuid'] = evnt.uuid
+                    currentButtonSettings['key'] = evnt.key
+                    currentButtonSettings['actionid'] = evnt.actionid
                     currentButtonSettings['selected-sound'] = currentButtonSettings['selected-sound']
                     currentButtonSettings['is-active'] = false //default value
 
-                    SoundboardAction.saveSettings(buttonContext, evnt.key, evnt.actionid, currentButtonSettings)
+                    SoundboardAction.saveSettings(evnt.uuid, evnt.key, evnt.actionid, currentButtonSettings)
                     console.log("Saving settings for button: ", currentButtonSettings)
             
                 }
@@ -218,13 +227,13 @@ SoundboardAction.onWillAppear((evnt) => {
         })
     })
     Voicemod.onAllSoundsLoaded(() => {
-        let currentSettings = SoundboardAction.getCurrentSettings(evnt.uuid)
+        let currentSettings = SoundboardAction.getCurrentSettings(evnt.actionid)
         if(currentSettings) {
             let sound = Voicemod.__soundLists[SoundsLists.all].sounds.find( s => s.id == currentSettings['selected-sound'])
             currentSettings['button-images'] = sound.image
             SoundboardAction.saveSettings(evnt.uuid, evnt.key, evnt.actionid, currentSettings)
         }   
-        $UD.sendToPropertyInspector(evnt.uuid, {
+        $UD.sendToPropertyInspector(evnt.uuid, evnt.key, evnt.actionid, {
             action: 'getSoundboards',
             soundboards: Voicemod.__soundLists
         })
@@ -249,7 +258,7 @@ function requestBitMap(settings) {
                 result: settings['button-images']
             }
         })
-        loadMyBitMap(settings['my-context'], settings['my-key'], settings['button-images'].default)
+        loadMyBitMap(settings.uuid, settings.key, settings.actionid, settings['button-images'].default)
     }
 }
 

@@ -27,7 +27,7 @@ class VoiceChangerActionClass {
     saveSettings(context, key, actionid, settings) {
         this.updateSettings(actionid, settings)
         $UD.setSettings(context, key, actionid, settings)
-        this.updateButtonState(context, key, settings)
+        this.updateButtonState(context, key, actionid, settings)
     }
 
     getCurrentSettings(actionid) {
@@ -44,9 +44,9 @@ class VoiceChangerActionClass {
     }
 
     // 加载（更新）图标
-    updateButtonState(context, key, settings) {
+    updateButtonState(context, key, actionid, settings) {
         if(!settings['button-images']) return //for some reason there are no images for this voice
-        loadMyBitMap(context, key, settings['is-active']
+        loadMyBitMap(context, key, actionid, settings['is-active']
                                 ? settings['button-images'].selected 
                                 : settings['button-images'].transparent? settings['button-images'].transparent : settings['button-images'].default)
     }
@@ -55,9 +55,9 @@ class VoiceChangerActionClass {
         this.__buttonSettings[actionid]['is-active'] = isActive;
         this.saveSettings(context, key, actionid, this.__buttonSettings[actionid])
     }
-    getSettingsAndThen(context, key, fn) {
-        const data = $UD.settingsCache[getUniqueActionId(context, key)];
-        if (context == data.uuid) {
+    getSettingsAndThen(actionid, fn) {
+        const data = $UD.settingsCache[actionid];
+        if (actionid == data.actionid) {
             fn(data.uuid, data.param.settings || {});
         }
     }
@@ -98,13 +98,21 @@ class VoiceChangerActionClass {
 		this.on(`${this.actionUUID}.${Events.run}`, (jsn) => fn(jsn));
 		return this;
 	}
+    onSetActive(fn) {
+        if (!fn) {
+			console.error('A callback function for setactive run event is required for onSetActive.');
+		}
+
+		this.on(`${this.actionUUID}.${Events.setActive}`, (jsn) => fn(jsn));
+		return this;
+    }
 }
 
 
 const VoiceChangerAction = new VoiceChangerActionClass(actionUUID);
 
-function loadMyBitMap(context, key, img) {
-    return $UD.setImage(context, key, 'data:image/png;base64,' + img)
+function loadMyBitMap(context, key, actionid, img) {
+    return $UD.setImage(context, key, actionid, 'data:image/png;base64,' + img)
 }
 VoiceChangerAction.onSendToPlugin((data) => {
     const payload = data.payload;
@@ -115,7 +123,7 @@ VoiceChangerAction.onSendToPlugin((data) => {
     if(payload.action == 'setImage') {
         const img = 'data:image/png;base64,' + payload.payload.image
         console.log("img to set. ")
-        return $UD.setImage(context, key, img, 0)
+        return $UD.setImage(context, key, actionid, img, 0)
     }
     if(payload.action == 'getVoices') {
         console.log(Voicemod.__voicesLists)
@@ -127,7 +135,7 @@ VoiceChangerAction.onSendToPlugin((data) => {
     if(payload.action == "updateBtnVoice") {
         const currentVoice = Voicemod.__voicesLists[VoiceLists.all].find( v => v.id == payload.payload.voiceId)
         if(!currentVoice?.images) {
-            requestVoiceBitMap({'selected-voice': currentVoice.id})
+            requestVoiceBitMap({uuid: context, key, actionid, 'selected-voice': currentVoice.id})
         }
         return VoiceChangerAction.saveSettings(context, key, actionid, {
             ...payload.payload.currentSettings,
@@ -185,6 +193,12 @@ function parseSettings(__settings) {
     }
     return {...newSettings, ...__settings}
 }
+
+VoiceChangerAction.onSetActive((evnt) => {
+    let btnSettings = VoiceChangerAction.getCurrentSettings(evnt.actionid)
+    console.log('----->', evnt, btnSettings)
+    requestVoiceBitMap({uuid: evnt.uuid, key: evnt.key, actionid: evnt.actionid, ...btnSettings})
+})
 VoiceChangerAction.onWillAppear((evnt) => {
     let settings = parseSettings(evnt.param)
     let mySelectedVoice = settings['selected-voice']
@@ -196,7 +210,7 @@ VoiceChangerAction.onWillAppear((evnt) => {
         if(voiceID == voice) { //the moment we have the right bitmap, let's set it on the key
             
             if(actionObject.result?.default) {
-                loadMyBitMap(evnt.uuid, evnt.key, actionObject.result.default);
+                loadMyBitMap(evnt.uuid, evnt.key, evnt.actionid, actionObject.result.default);
                 btnSettings['button-images'] = actionObject.result;
                 btnSettings['my-context'] = evnt.uuid;
                 btnSettings['is-active'] = false; //default value;
@@ -241,7 +255,7 @@ VoiceChangerAction.onWillAppear((evnt) => {
         })
     })
 
-    VoiceChangerAction.getSettingsAndThen(evnt.uuid, evnt.key, (btnContext, __btnSettings) => {
+    VoiceChangerAction.getSettingsAndThen(evnt.actionid, (btnContext, __btnSettings) => {
         console.log("BUTTON SETTINGS FROM SD ", __btnSettings)
         let __settings = parseSettings(__btnSettings)
         let internalSettings = VoiceChangerAction.getCurrentSettings(evnt.actionid)
@@ -250,16 +264,16 @@ VoiceChangerAction.onWillAppear((evnt) => {
 
         VoiceChangerAction.updateSettings(evnt.actionid, __settings)
 
-       VoiceChangerAction.updateButtonState(btnContext, evnt.key, __settings) //so we update the status of the button when changing pages
+       VoiceChangerAction.updateButtonState(btnContext, evnt.key, evnt.actionid, __settings) //so we update the status of the button when changing pages
         //if we don't have the images yet, let's request them when the button shows on screen
         if(!__btnSettings['button-images']) {
             if(!Voicemod.connected) {
                 Voicemod.onConnected(btnContext, () => {
                     console.log("Requesting bitmap now for: ", btnContext, "- ", __settings)
-                    requestVoiceBitMap(__settings)
+                    requestVoiceBitMap({uuid: evnt.uuid, key: evnt.key, actionid: evnt.actionid, ...__settings})
                 })
             } else {
-                requestVoiceBitMap(__settings)
+                requestVoiceBitMap({uuid: evnt.uuid, key: evnt.key, actionid: evnt.actionid, ...__settings})
             }   
         }
     })

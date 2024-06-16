@@ -9,7 +9,7 @@ let __VOICES = null;
 let __SETTINGS = {}
 let __UI_STATUS = null;
 
-$PI.connect(UlanzideckPort, ComUlanziUlanzideckVoicemodChangerPushToTalk);
+$PI.connect(UlanzideckSocketPort, ComUlanziUlanzideckVoicemodChangerPushToTalk);
 $PI.onConnected((jsn) => {
     $PI.onWillAppear((data) => {
         const payload = data.param;

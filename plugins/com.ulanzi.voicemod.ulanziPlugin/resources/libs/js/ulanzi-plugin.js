@@ -27,7 +27,7 @@ class UlanziPlugin {
             this.websocket = null;
         }
 
-        this.websocket = new WebSocket('ws://127.0.0.1:' + this.port);
+        this.websocket = new WebSocket(`ws://${UlanzideckSocketAddress}:${this.port}`);
 
         this.websocket.onopen = () => {
             let json = {
@@ -115,7 +115,7 @@ class UlanziPlugin {
         } else if (eventData?.eventType === Events.getSettings) {
             this.emit(`${eventData.uuid}.${Events.didReceiveSettings}`, eventData);
         } else if (eventData?.eventType === Events.sendToPlugin) {
-            const pluginSettings = window.getUlanziPluginSettings(eventData.uuid, eventData.key);
+            const pluginSettings = window.getUlanziPluginSettings(eventData.actionid);
             if (pluginSettings) {
                 eventData.param = {
                     ...eventData.param,
@@ -159,7 +159,7 @@ class UlanziPlugin {
 	}
     getGlobalSettings() {
         const globalSettings = window.getUlanziGlobalSettings();
-        const pluginSettings = window.getUlanziPluginSettings(this.uuid, this.key);
+        const pluginSettings = window.getUlanziPluginSettings(this.actionid);
         this.sendEvent(Events.getGlobalSettings, {
             settings: {...pluginSettings, ...globalSettings},
             ...pluginSettings
@@ -167,14 +167,14 @@ class UlanziPlugin {
     }
     getSettings() {
         const globalSettings = window.getUlanziGlobalSettings();
-        const pluginSettings = window.getUlanziPluginSettings(this.uuid, this.key);
+        const pluginSettings = window.getUlanziPluginSettings(this.actionid);
         this.sendEvent(Events.getSettings, {
 			settings: globalSettings,
             ...pluginSettings
 		});
     }
     setSettings(payload) {
-        window.setUlanziPluginSettings(this.uuid, this.key, payload);
+        window.setUlanziPluginSettings(this.actionid, payload);
         this.sendEvent(Events.setSettings, {
 			settings: payload,
 		});

@@ -11,7 +11,7 @@ let __UI_STATUS = null;
 $PI.on('allVoicesBitmapsLoaded' ,() => {
     updateButtonWithVoiceBitmap(__SETTINGS['selected-voice'])
 })
-$PI.connect(UlanzideckPort, ComUlanziUlanzideckVoicemodSoundboard);
+$PI.connect(UlanzideckSocketPort, ComUlanziUlanzideckVoicemodSoundboard);
 $PI.onConnected((jsn) => {
     uuid = jsn['uuid'];
     key = jsn['key'];

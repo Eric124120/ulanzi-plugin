@@ -6,7 +6,7 @@ let __VOICES = null;
 let __SETTINGS = {}
 
 let __UI_STATUS = null;
-$PI.connect(UlanzideckPort, ComUlanziUlanzideckVoicemodChangerOn);
+$PI.connect(UlanzideckSocketPort, ComUlanziUlanzideckVoicemodChangerOn);
 $PI.onConnected((jsn) => {
     $PI.onWillAppear((data) => {
         const payload = data.param;

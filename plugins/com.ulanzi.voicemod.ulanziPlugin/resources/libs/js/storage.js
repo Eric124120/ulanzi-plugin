@@ -138,17 +138,14 @@ window.removeUlanziGlobalSettings = function() {
     window.ulanziLocalStorage.remove(GLOBAL_SETTINGS_KEY);
 }
 
-window.setUlanziPluginSettings = function(uuid, key, settings) {
-    const actionUUID = getUniqueActionId(uuid, key);
-    window.ulanziLocalStorage.set(actionUUID, JSON.stringify(settings));
+window.setUlanziPluginSettings = function(actionid, settings) {
+    window.ulanziLocalStorage.set(actionid, JSON.stringify(settings));
 }
 
-window.getUlanziPluginSettings = function(uuid, key) {
-    const actionUUID = getUniqueActionId(uuid, key);
-    const settingsStr = window.ulanziLocalStorage.get(actionUUID);
+window.getUlanziPluginSettings = function(actionid) {
+    const settingsStr = window.ulanziLocalStorage.get(actionid);
     return JSON.parse(settingsStr);
 }
-window.removeUlanziPluginSettings = function(uuid, key) {
-    const actionUUID = getUniqueActionId(uuid, key);
-    window.ulanziLocalStorage.remove(actionUUID);
+window.removeUlanziPluginSettings = function(actionid) {
+    window.ulanziLocalStorage.remove(actionid);
 }

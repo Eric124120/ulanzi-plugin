@@ -113,7 +113,7 @@ function requestVoiceBitMap(settings) {
                 result: settings['button-images']
             }
         })
-        VoiceChangerAction.updateButtonState(settings['my-context'], settings)
+        VoiceChangerAction.updateButtonState(settings.uuid, settings.key, settings.actionid, settings)
     }
 }
 
