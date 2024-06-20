@@ -7,7 +7,7 @@
   "Version":"1.0.0",
   "Category":"Zoom",
   "CategoryIcon":"resources/images/video-camera@2x.png",
-  "CodePath":"main.html",
+  "CodePath":"main.js",
   "Type": "JavaScript",
   "SupportedInMultiActions": false,
   "UUID":"com.ulanzi.ulanzideck.zoom",
@@ -75,7 +75,7 @@
     {
       "Name":"Focus",
       "UUID":"com.ulanzi.ulanzideck.zoom.focus",
-      "Icon":"resources/images/streamdeck-zoom-focus-action@2x.png",
+      "Icon":"resources/images/streamdeck-zoom-focus-actionicon@2x.png",
       "PropertyInspectorPath":"resources/actions/zoomFocus/index.html",
       "State": 0,
       "States":[
