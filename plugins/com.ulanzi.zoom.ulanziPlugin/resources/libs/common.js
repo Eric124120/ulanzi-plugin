@@ -3,10 +3,11 @@ var websocket = null,
   registerEventName = null,
   actionInfo = {},
   inInfo = {},
-  runningApps = [],
-  isQT = navigator.appVersion.includes('QtWebEngine');
+  runningApps = [];
 
 function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, inActionInfo) {
+  console.log('-----------><<><')
+  
   uuid = inUUID;
   registerEventName = inRegisterEvent;
   console.log(uuid, inActionInfo);
@@ -55,13 +56,13 @@ function loadConfiguration(payload) {
   for (var key in payload) {
     try {
       var elem = document.getElementById(key);
-      if (elem.classList.contains("sdCheckbox")) { // Checkbox
+      if (elem.classList.contains("sdCheckbox")) {
         elem.checked = payload[key];
       }
-      else if (elem.classList.contains("sdFile")) { // File
+      else if (elem.classList.contains("sdFile")) {
 
       }
-      else { // Normal value
+      else {
         elem.value = payload[key];
       }
       console.log("Load: " + key + "=" + payload[key]);
@@ -78,13 +79,13 @@ function setSettings() {
 
   Array.prototype.forEach.call(elements, function (elem) {
     var key = elem.id;
-    if (elem.classList.contains("sdCheckbox")) { // Checkbox
+    if (elem.classList.contains("sdCheckbox")) {
       payload[key] = elem.checked;
     }
-    else if (elem.classList.contains("sdFile")) { // File
+    else if (elem.classList.contains("sdFile")) {
 
     }
-    else { // Normal value
+    else {
       payload[key] = elem.value;
     }
     console.log("Save: " + key + "<=" + payload[key]);
@@ -128,12 +129,6 @@ function openWebsite() {
     };
     websocket.send(JSON.stringify(json));
   }
-}
-
-if (!isQT) {
-  document.addEventListener('DOMContentLoaded', function () {
-    initPropertyInspector();
-  });
 }
 
 window.addEventListener('beforeunload', function (e) {
