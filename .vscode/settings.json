@@ -1,0 +1,9 @@
+{
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "xiosbase": "cpp",
+        "*.rh": "cpp",
+        "iostream": "cpp",
+        "string": "cpp"
+    }
+}

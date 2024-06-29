@@ -1,0 +1,17 @@
+{
+  "name": "com.ulanzi.zoom.ulanziplugin",
+  "version": "1.0.0",
+  "description": "v1.1更新:\r     1.app.js向服务端发送 更新图标 命令时，需要带上action的uuid，而不是主服务的uuid",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "node-gyp rebuild"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "gypfile": true,
+  "dependencies": {
+    "node-addon-api": "^8.0.0"
+  }
+}
