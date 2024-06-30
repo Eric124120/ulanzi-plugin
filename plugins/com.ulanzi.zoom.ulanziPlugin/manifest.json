@@ -150,7 +150,7 @@
       "Name":"Ask All to Unmute",
       "UUID":"com.ulanzi.ulanzideck.zoom.unmuteall",
       "Icon":"resources/images/streamdeck-zoom-unmuteall-actionicon@2x.png",
-      "PropertyInspectorPath":"resources/actions/zooMunmuteall/index.html",
+      "PropertyInspectorPath":"resources/actions/zoomUnmuteall/index.html",
       "State": 0,
       "States":[
         {
