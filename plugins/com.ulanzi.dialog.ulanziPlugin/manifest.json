@@ -1,13 +1,13 @@
 {
   "Name":"Dialog",
-  "Icon":"src/assets/images/dialog-plugun-icon.png",
+  "Icon":"resources/images/dialog-plugun-icon.png",
   "Author":"Ulanzi",
   "Description":"Dialog action.",
   "PrivateAPI":true,
   "Version":"1.0.0",
   "Category":"Dialog",
-  "CategoryIcon":"src/assets/images/dialog-plugun-icon.png",
-  "CodePath":"src/main.js",
+  "CategoryIcon":"resources/images/dialog-plugun-icon.png",
+  "CodePath":"server/main.js --no-sandbox",
   "Type": "JavaScript",
   "SupportedInMultiActions": false,
   "UUID":"com.ulanzi.ulanzideck.dialog",
@@ -15,15 +15,15 @@
     {
       "Name":"Cut Dialog",
       "UUID":"com.ulanzi.ulanzideck.dialog.cut",
-      "Icon":"src/assets/images/cut-action-icon.png",
-      "PropertyInspectorPath":"src/pages/cut/index.html",
+      "Icon":"resources/images/cut-action-icon.png",
+      "PropertyInspectorPath":"resources/actions/cut/index.html",
       "State": 0,
       "States":[
         {
-          "Image":"src/assets/images/cut-off-icon.png"
+          "Image":"resources/images/cut-off-icon.png"
         },
         {
-          "Image":"src/assets/images/cut-on-icon.png"
+          "Image":"resources/images/cut-on-icon.png"
         }
       ],
       "Tooltip":"Dialog show Cut Messages",
@@ -32,15 +32,15 @@
     {
       "Name":"System Dialog",
       "UUID":"com.ulanzi.ulanzideck.dialog.system",
-      "Icon":"src/assets/images/system-action-icon.png",
-      "PropertyInspectorPath":"src/pages/system/index.html",
+      "Icon":"resources/images/system-action-icon.png",
+      "PropertyInspectorPath":"resources/actions/system/index.html",
       "State": 0,
       "States":[
         {
-          "Image":"src/assets/images/system-off-icon.png"
+          "Image":"resources/images/system-off-icon.png"
         },
         {
-          "Image":"src/assets/images/system-on-icon.png"
+          "Image":"resources/images/system-on-icon.png"
         }
       ],
       "Tooltip":"Dialog Show System Infos",
