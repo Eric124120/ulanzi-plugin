@@ -18,5 +18,4 @@ function cutDialog() {
     console.error(err);
   })
 }
-
-module.exports = cutDialog;
+exports = cutDialog;

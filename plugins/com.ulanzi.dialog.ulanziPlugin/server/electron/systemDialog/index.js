@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
 let mainWindow;
-function cutDialog() {
+function systemDialog() {
   app.whenReady().then(() => {
     if (!mainWindow) {
       mainWindow = new BrowserWindow({
@@ -19,4 +19,4 @@ function cutDialog() {
   })
 }
 
-module.exports = cutDialog;
+exports = systemDialog;
