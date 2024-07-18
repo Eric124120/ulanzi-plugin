@@ -19,4 +19,4 @@ function systemDialog() {
   })
 }
 
-exports = systemDialog;
+module.exports = systemDialog;

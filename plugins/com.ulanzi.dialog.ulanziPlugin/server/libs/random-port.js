@@ -31,6 +31,7 @@ function writePort(port, status) {
 }
 
 function createRandomPort() {
+    console.log('------zzz')
     const randomPort = generateRandomPort();
      return writePort(randomPort, '1');
 }

@@ -1,10 +1,10 @@
 {
   "name": "com.ulanzi.dialog.ulanziplugin",
   "version": "1.0.0",
-  "main": "server/main.js",
+  "main": "server/start.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron server/main.js 127.0.0.1 3906  --no-sandbox"
+    "start": "node server/start.js"
   },
   "author": "Eric",
   "license": "ISC",

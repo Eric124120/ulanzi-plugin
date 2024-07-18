@@ -7,7 +7,7 @@
   "Version":"1.0.0",
   "Category":"Dialog",
   "CategoryIcon":"resources/images/dialog-plugun-icon.png",
-  "CodePath":"server/main.js --no-sandbox",
+  "CodePath":"server/start.js",
   "Type": "JavaScript",
   "SupportedInMultiActions": false,
   "UUID":"com.ulanzi.ulanzideck.dialog",
