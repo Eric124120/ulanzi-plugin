@@ -14,6 +14,7 @@ function createWindow() {
   const mainWin = new BrowserWindow({
     width: 800,
     height: 600,
+    show: true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false // 需要禁用上下文隔离以使用 ipcRenderer

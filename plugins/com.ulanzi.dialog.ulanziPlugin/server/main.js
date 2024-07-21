@@ -1,10 +1,11 @@
 const { createRandomPort } = require('./libs/random-port.js');
 const WebSocket = require('ws');
 const path = require('path');
+const { ipcRenderer, app } = require('electron');
 const { WebSocketServer } = WebSocket;
 
 const defaultIp = '127.0.0.1';
-const defaultPort = '3069';
+const defaultPort = '3906';
 const uuid = "com.ulanzi.ulanzideck.dialog"
 
 let actionidWsMapping = new Map();//key -> ws 
@@ -14,13 +15,29 @@ let currActionid = null; // 记录当前正在通信的配置页
 
 function initMain(randomPort) {
   function cutDialog() {
+    app.whenReady().then(() => {
+      ipcRenderer.send('trigger-cut-dialog', [
+        {
+            title: '剪切板内容1',
+            content: 'text content 1',
+        },
+        {
+            title: '剪切板内容2',
+            content: 'text content 2',
+        }
+      ]);
+    })
+    
   }
   function systemDialog() {
-
+    app.whenReady().then(() => {
+      ipcRenderer.send('trigger-system-dialog');
+    });
+    
   }
   const runFunMap = {
     'com.ulanzi.ulanzideck.dialog.cut': cutDialog,
-    'com.ulanzi.ulanzideck.zoom.system': systemDialog,
+    'com.ulanzi.ulanzideck.dialog.system': systemDialog,
   }
   //读取上位机信息
   const runtime = process.argv
@@ -110,9 +127,9 @@ function initMain(randomPort) {
 
   //执行插件功能
   function run(data) {
-    // const fn = runFunMap[data.uuid];
+    const fn = runFunMap[data.uuid];
     console.log('--------------------->><', data.uuid)
-    // fn();
+    fn();
     // fn(ws);
   }
 

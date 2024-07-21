@@ -38,6 +38,7 @@ function systemDialog() {
 
       async function getCpuTemperature() {
         const cpuTemp = await si.cpuTemperature();
+        console.log('---->', cpuTemp)
         if (cpuTemp.main) {
           return cpuTemp.main;
         } else {
@@ -79,7 +80,7 @@ function systemDialog() {
             mem: (memory.used / memory.total * 100).toFixed(2),
           };
           // 将系统信息发送到渲染进程
-          mainWindow.webContents.send('system-info', systemInfo);
+          mainWindow?.webContents?.send('system-info', systemInfo);
         } catch (err) {
           console.error(err);
         }
