@@ -1,66 +1,22 @@
 const { createRandomPort } = require('./libs/random-port.js');
-const { app, BrowserWindow } = require('electron');
-const { createDialog } = require('./dialog');
-// const { cutDialog, systemDialog } = require('./electron');
 const WebSocket = require('ws');
 const path = require('path');
 const { WebSocketServer } = WebSocket;
 
+const defaultIp = '127.0.0.1';
+const defaultPort = '3069';
 const uuid = "com.ulanzi.ulanzideck.dialog"
-
 
 let actionidWsMapping = new Map();//key -> ws 
 let actionParamMapping = new Map() ; //actionid -> payload 
 let latestWS = null; //最近建立连接的websocket
 let currActionid = null; // 记录当前正在通信的配置页
-let cutWindow = null;
-function createWindow() {
-  // 创建一个新的窗口
-  cutWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    show: false,
-    webPreferences: {
-      nodeIntegration: true
-    }
-  });
-
-  // 加载应用的主页面
-  cutWindow.loadFile('index.html');
-}
-app.on('ready', createWindow);
-// 在适当的地方调用 createDialog 函数
-app.on('ready', () => {
-  createDialog(cutWindow, {
-    url: 'index.html',
-    width: 400,
-    height: 300
-  });
-});
-console.log('------------------------<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>')
-app.on('ready', () => {
-  
-  createRandomPort().then(d => {
-    initMain(d.port)
-  }); 
-})
 
 function initMain(randomPort) {
- 
   function cutDialog() {
-    if (!cutWindow) {
-      cutWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        frame: false, // 隐藏标题栏
-        webPreferences: {
-          nodeIntegration: true
-        }
-      });
-    }
   }
   function systemDialog() {
-  
+
   }
   const runFunMap = {
     'com.ulanzi.ulanzideck.dialog.cut': cutDialog,
@@ -218,3 +174,12 @@ function initMain(randomPort) {
     ws.send(JSON.stringify(msg))
   }
 }
+
+function startMain() {
+  createRandomPort().then(d => {
+    initMain(d.port)
+  }); 
+}
+
+module.exports = startMain;
+
