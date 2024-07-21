@@ -2,7 +2,7 @@
  * @Author: 黄承文 chengwen@ssc-hn.com
  * @Date: 2024-07-21 15:06:48
  * @LastEditors: 黄承文 chengwen@ssc-hn.com
- * @LastEditTime: 2024-07-22 02:10:20
+ * @LastEditTime: 2024-07-22 03:03:40
  * @FilePath: /ulanzi-plugin/plugins/com.ulanzi.dialog.ulanziPlugin/server/electron/cutDialog/index.html
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -16,6 +16,9 @@
         body {
             margin: 0;
             -webkit-user-select: none; /* 禁用文本选择 */
+        }
+        #app {
+            position: relative;
         }
         .cut-container {
             height: 100vh;
@@ -47,9 +50,12 @@
             top: 14px;
         }
         .cut-body {
+            box-sizing: border-box;
             padding: 24px;
+            
         }
         .cut-list {
+            padding: 0;
             list-style-type: none;
             display: flex;
             flex-direction: row;
@@ -57,6 +63,7 @@
         }
 
         .cut-list .cut-list-item {
+            position: relative;
             width: calc(50% - 10px);
             cursor: pointer;
             display: inline-block;
@@ -65,23 +72,74 @@
             line-height: 48px;
             height: 48px;
             font-size: 16px;
-            background: rgba(240, 197, 6, 0.5);
+            background: #f3ca7e;
+            color: rgba(0, 0, 0, 0.7);
             -webkit-app-region: no-drag; /* 使按钮不可拖动 */
+        }
+        .cut-list .cut-list-item.selected-item::before {
+            content: '.';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 48px;
+            height: 48px;
+            background-image: url(./copy-selected.png);
+            background-size: 48px;
+            background-repeat: no-repeat;
+            border-radius: 0 8px 8px 0;
+        }
+        .show-copy-tips {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120px;
+            transform: translate(-50%, -50%);
+            border-radius: 8px;
+            background: rgba(237, 199, 26, 0.4);
+            line-height: 36px;
+            height: 36px;
+            font-size: 14px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            color: rgba(0, 0, 0, 0.6);
+        }
+        .show-copy-tips p.message {
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .show-copy-tips p.message::before {
+            content: '.';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-image: url(./copy-success.png);
+            background-size: 16px;
+            background-repeat: no-repeat;
         }
     </style>
 </head>
 <body>
-    <div id="app" class="cut-container">
-        <div class="title-bar">
-            <h3 class="title-text">剪切板</h3>
-            <span class="btn" v-on:click="onCloseCutDialog">X</span>
+    <div id="app">
+        <div class="cut-container">
+            <div class="title-bar">
+                <h3 class="title-text">剪切板</h3>
+                <span class="btn" v-on:click="onCloseCutDialog">X</span>
+            </div>
+            <div class="cut-body">
+                <ul class="cut-list">
+                    <li v-bind:class="{'cut-list-item': true, 'selected-item': selectedIndex === index}" v-for="(item, index) in cutList" v-on:click="onClickCutItem(item, index)" :title="item.content" :key="index">
+                        {{ item.title }}
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="cut-body">
-            <ul class="cut-list">
-                <li class="cut-list-item" v-for="item in cutList" v-on:click="onClickCutItem(item)" :title="item.content">
-                    {{ item.title }}
-                </li>
-            </ul>
+        <div v-if="showCopyTips" class="show-copy-tips">
+            <p class="message">已复制</p>
         </div>
     </div>
     <script>
@@ -92,13 +150,20 @@
                     el: '#app',
                     data: {
                         cutList: _curList,
+                        showCopyTips: false,
+                        selectedIndex: -1,
                     },
                     methods: {
                         onCloseCutDialog: function() {
                             window.electron.closeCutDialog();
                         },
-                        onClickCutItem: function(data) {
+                        onClickCutItem: function(data, index) {
                             window.electron.copyText(data.content);
+                            vm.$data.selectedIndex = index;
+                            vm.$data.showCopyTips = true;
+                            setTimeout(() => {
+                                vm.$data.showCopyTips = false;
+                            }, 2000);
                         }
                     },
                 });

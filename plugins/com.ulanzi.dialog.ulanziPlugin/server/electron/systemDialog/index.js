@@ -2,7 +2,7 @@
  * @Author: 黄承文 chengwen@ssc-hn.com
  * @Date: 2024-07-21 22:00:33
  * @LastEditors: 黄承文 chengwen@ssc-hn.com
- * @LastEditTime: 2024-07-22 01:35:09
+ * @LastEditTime: 2024-07-22 02:17:51
  * @FilePath: /ulanzi-plugin/plugins/com.ulanzi.dialog.ulanziPlugin/server/electron/systemDialog/index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -26,6 +26,7 @@ function systemDialog() {
         transparent: true, // 设置窗口背景透明
         frame: false, // 隐藏窗口的标题栏和边框
         alwaysOnTop: true, // 使窗口保持在最上层
+        resizable: false, // 禁止改变窗口大小
         webPreferences: {
           preload: path.join(__dirname, 'preload.js'),
           contextIsolation: true,
