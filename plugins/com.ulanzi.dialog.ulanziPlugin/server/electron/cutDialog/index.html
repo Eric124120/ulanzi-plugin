@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electron App</title>
+    <title>剪切板信息</title>
     <style>
         body {
             margin: 0;
@@ -30,19 +30,14 @@
 </head>
 <body>
     <div id="title-bar">
-        <div>这是自定义的标题栏</div>
+        <div>剪切板</div>
         <div>
-            <span class="btn" id="minimize-btn">_</span>
             <span class="btn" id="close-btn">X</span>
         </div>
     </div>
     <script>
-        document.getElementById('minimize-btn').addEventListener('click', () => {
-            window.electron.minimizeWindow();
-        });
-
         document.getElementById('close-btn').addEventListener('click', () => {
-            window.electron.closeWindow();
+            window.electron.closeCutDialog();
         });
     </script>
 </body>

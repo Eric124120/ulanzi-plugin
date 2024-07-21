@@ -4,9 +4,16 @@
   "main": "server/start.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/start.js"
+    "start": "nodemon"
   },
   "author": "Eric",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "electron": "^31.2.1",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
 }

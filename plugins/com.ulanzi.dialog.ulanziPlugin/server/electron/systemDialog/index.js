@@ -9,11 +9,24 @@ function systemDialog() {
         width: 800,
         height: 600,
         frame: false, // 隐藏标题栏
+        webPreferences: {
+          preload: path.join(__dirname, 'preload.js'),
+          contextIsolation: true,
+          enableRemoteModule: false, // 禁用 remote 模块
+          nodeIntegration: false
+        }
       });
-      mainWindow.loadFile('index.html');
+      mainWindow.loadFile(path.resolve(__dirname, 'index.html'));
+      mainWindow.on('close', () => {
+        mainWindow = null;
+      });
+      ipcMain.on('close-system-dialog', () => {
+        if (mainWindow && typeof mainWindow.close === 'function') {
+          mainWindow.close();
+        }
+      });
     } else {
       mainWindow.close();
-      mainWindow = null;
     }
   }).catch((err) => {
     console.error(err);
