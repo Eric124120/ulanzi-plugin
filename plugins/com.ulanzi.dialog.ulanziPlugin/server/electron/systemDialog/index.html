@@ -1,3 +1,11 @@
+<!--
+ * @Author: 黄承文 chengwen@ssc-hn.com
+ * @Date: 2024-07-21 22:00:33
+ * @LastEditors: 黄承文 chengwen@ssc-hn.com
+ * @LastEditTime: 2024-07-22 00:16:14
+ * @FilePath: /ulanzi-plugin/plugins/com.ulanzi.dialog.ulanziPlugin/server/electron/systemDialog/index.html
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,14 +16,47 @@
         body {
             margin: 0;
             -webkit-user-select: none; /* 禁用文本选择 */
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        body ul.system-container {
+            padding: 24px;
+            width: 100vw;
+            height: 100vh;
             -webkit-app-region: drag; /* 使区域可拖动 */
             cursor: pointer;
+            font-size: 18px;
+            list-style-type: none;
+        }
+
+        body ul.system-container li {
+            color: rgba(14, 238, 32, 1);
+            margin-top: 18px;
+        }
+        body ul.system-container li:first-child {
+            margin-top: 0;
         }
     </style>
 </head>
 <body>
-    <div class="system-container">
-        系统信息
-    </div>
+    <ul class="system-container">
+        <li class="info" id="cpu-load">CPU: </li>
+        <li class="info" id="cpu-temp">CPU TEMP: </li>
+        <li class="info" id="gpu-usage">GPU: </li>
+        <li class="info" id="gpu-mem">MEM: </li>
+    </ul>
+    <script>
+        window.electron.onSystemInfo((event, systemInfo) => {
+            document.getElementById('cpu-load').innerText = `CPU: ${systemInfo.cpu}%`;
+            document.getElementById('cpu-temp').innerText = `CPU TEMP: ${systemInfo.cpuTemp}°C`;
+            document.getElementById('gpu-usage').innerText = `GPU: ${systemInfo.gpu}%`;
+            document.getElementById('gpu-mem').innerText = `MEM: ${systemInfo.mem}%`;
+        });
+        window.electron.onOsxCpuTempFail((event) => {
+            alert('osx-cpu-temp 获取cpu温度命令异常, 请在终端执行brew install osx-cpu-temp, 进行osx-cpu-temp安装');
+        });
+    </script>
 </body>
 </html>
