@@ -13,6 +13,7 @@ function systemDialog() {
       mainWindow.loadFile('index.html');
     } else {
       mainWindow.close();
+      mainWindow = null;
     }
   }).catch((err) => {
     console.error(err);

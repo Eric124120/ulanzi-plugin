@@ -8,11 +8,5 @@
   },
   "author": "Eric",
   "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "electron": "^31.2.0"
-  },
-  "dependencies": {
-    "ws": "^8.18.0"
-  }
+  "description": ""
 }
