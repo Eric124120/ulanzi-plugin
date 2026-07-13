@@ -4,7 +4,7 @@
   "Author":"Ulanzi",
   "Description":"Voicemod action.",
   "PrivateAPI":true,
-  "Version":"1.0.0",
+  "Version":"1.0.1",
   "Category":"Voicemod",
   "CategoryIcon":"resources/images/categoryIcon.png",
   "CodePath":"main.html",
